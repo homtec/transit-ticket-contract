@@ -16,14 +16,14 @@ contract mortal is owned {
     }
 }
 
-contract ticket is owned, mortal {
+contract Ticket is owned, mortal {
     /* Define variables */
 
-    uint8 start_gtfs_stop_id;
+    uint8 public start_gtfs_stop_id;
 
-    uint256 start_time;
+    uint256 public start_time;
 
-    uint8 product_id;
+    uint8 public product_id;
 
     /* This runs when the contract is executed */
     function ticket(uint8 _start_gtfs_stop_id, uint8 _product_id  ) public {
@@ -33,23 +33,11 @@ contract ticket is owned, mortal {
         product_id = _product_id;
     }
 
-    function isValidwithin5Minutes() public view returns (bool) {
-      if (now >= start_time + 5 * 1 minutes) {
+    function isValid() public view returns (bool) {
+      if (now >= start_time + 3 * 1 minutes) {
         return false;
       }
       return true;
-    }
-
-    function printStartTime() public constant returns (uint256) {
-      return start_time;
-    }
-
-    function printStopId() public constant returns (uint8) {
-      return start_gtfs_stop_id;
-    }
-
-    function printProductId() public constant returns (uint8) {
-      return product_id;
     }
 
 }
