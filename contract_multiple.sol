@@ -27,16 +27,31 @@ contract Ticket is owned, mortal {
 
     string public name;
 
+    address operator_wallet;
+
+    bool ticket_active = false;
+
     /* This runs when the contract is executed */
-    function Ticket(uint8 _start_gtfs_stop_id, uint8 _product_id, string _name  ) public {
+    function Ticket( string _name  ) public {
+
+        name = _name;
+    }
+
+        /* This runs when the contract is executed */
+
+    function BuyTicket(uint8 _start_gtfs_stop_id, uint8 _product_id  ) public {
 
         start_gtfs_stop_id = _start_gtfs_stop_id;
         start_time = now;
         product_id = _product_id;
-        name = _name;
+        ticket_active = true;
     }
 
+
+
     function isValid() public view returns (bool) {
+
+        if(!ticket_active) return false;
       if (now >= start_time + 3 * 1 minutes) {
         return false;
       }
