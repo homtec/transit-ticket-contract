@@ -19,7 +19,7 @@ contract mortal is owned {
 contract Ticket is owned, mortal {
     /* Define variables */
 
-    uint8 public start_gtfs_stop_id;
+    uint256 public start_gtfs_stop_id;
 
     uint256 public start_time;
 
@@ -39,7 +39,7 @@ contract Ticket is owned, mortal {
 
         /* This runs when the contract is executed */
 
-    function BuyTicket(uint8 _start_gtfs_stop_id, uint8 _product_id  ) public {
+    function BuyTicket(uint256 _start_gtfs_stop_id, uint8 _product_id  ) public {
 
         start_gtfs_stop_id = _start_gtfs_stop_id;
         start_time = now;
