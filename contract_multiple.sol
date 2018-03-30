@@ -1,4 +1,4 @@
-pragma solidity ^0.4.17;
+pragma solidity ^0.4.21;
 
 
 contract owned {
@@ -27,7 +27,11 @@ contract Ticket is owned, mortal {
 
     string public name;
 
-    address operator_wallet;
+    address transport_agency_address = 0x9E7d20C9c0484c3152c0e628049e7485B5bd6CD2;
+
+    uint stored_value;
+
+    uint price = 1;
 
     bool ticket_active = false;
 
@@ -39,14 +43,35 @@ contract Ticket is owned, mortal {
 
         /* This runs when the contract is executed */
 
-    function BuyTicket(uint256 _start_gtfs_stop_id, uint8 _product_id  ) public {
+    function BuyTicket(uint256 _start_gtfs_stop_id, uint8 _product_id  ) public payable {
 
-        start_gtfs_stop_id = _start_gtfs_stop_id;
-        start_time = now;
-        product_id = _product_id;
-        ticket_active = true;
+    //address x = 0x123;
+    //address myAddress = this;
+    //if (x.balance < 10 && myAddress.balance >= 10) x.transfer(10);
+
+        //receive payment
+        stored_value += msg.value;
+
+        //buy ticket if enough value
+        if(stored_value >= price) {
+            start_gtfs_stop_id = _start_gtfs_stop_id;
+            start_time = now;
+            product_id = _product_id;
+            ticket_active = true;
+
+            //pay
+            //update stored_value
+            stored_value -= price;
+
+            //send amount to agency
+            transport_agency_address.transfer(price);
+
+        }
     }
 
+    function deposit() payable public {
+      //deposits[msg.sender] += msg.value;
+    }
 
 
     function isValid() public view returns (bool) {
