@@ -29,7 +29,7 @@ contract Ticket is mortal {
 
     address public transport_agency_address;
 
-    uint public price = 1;
+    uint public price = 1000000000000000;
 
     bool public ticket_active = false;
 
@@ -48,7 +48,7 @@ contract Ticket is mortal {
         product_id = _product_id;
         ticket_active = true;
         //send amount to agency
-        transport_agency_address.transfer(msg.value);
+        transport_agency_address.transfer(price);
     }
 
     function deposit() payable public {
