@@ -16,7 +16,7 @@ contract mortal is owned {
     }
 }
 
-contract Ticket is owned, mortal {
+contract Ticket is mortal {
     /* Define variables */
 
     uint256 public start_gtfs_stop_id;
@@ -27,46 +27,28 @@ contract Ticket is owned, mortal {
 
     string public name;
 
-    address transport_agency_address = 0x9E7d20C9c0484c3152c0e628049e7485B5bd6CD2;
+    address public transport_agency_address;
 
-    uint stored_value;
+    uint public price = 1;
 
-    uint price = 1;
-
-    bool ticket_active = false;
+    bool public ticket_active = false;
 
     /* This runs when the contract is executed */
-    function Ticket( string _name  ) public {
-
+    function Ticket( string _name, address _agency ) public {
+        transport_agency_address = _agency;
         name = _name;
     }
 
         /* This runs when the contract is executed */
 
     function BuyTicket(uint256 _start_gtfs_stop_id, uint8 _product_id  ) public payable {
-
-    //address x = 0x123;
-    //address myAddress = this;
-    //if (x.balance < 10 && myAddress.balance >= 10) x.transfer(10);
-
-        //receive payment
-        stored_value += msg.value;
-
-        //buy ticket if enough value
-        if(stored_value >= price) {
-            start_gtfs_stop_id = _start_gtfs_stop_id;
-            start_time = now;
-            product_id = _product_id;
-            ticket_active = true;
-
-            //pay
-            //update stored_value
-            stored_value -= price;
-
-            //send amount to agency
-            transport_agency_address.transfer(price);
-
-        }
+        require(msg.value >= price);
+        start_gtfs_stop_id = _start_gtfs_stop_id;
+        start_time = now;
+        product_id = _product_id;
+        ticket_active = true;
+        //send amount to agency
+        transport_agency_address.transfer(msg.value);
     }
 
     function deposit() payable public {
